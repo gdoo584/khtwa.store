@@ -217,7 +217,7 @@
   <div class="toast" role="status"></div>
   <script>
     const emailConfig = {
-      serviceId: "service_9yqxb9j",
+      serviceId: "service_bl87dkv",
       templateId: "029780",
       publicKey: "8aLJKRhw5egay4px6"
     };
@@ -402,6 +402,26 @@
         created_at: new Date().toLocaleString("ar-SD")
       });
     }
+    function openWhatsAppOrder(order) {
+      const itemLines = order.items.map(item => {
+        const product = products.find(entry => entry.id === item.productId);
+        return product ? `- ${product.name} | المقاس: ${item.size} | الكمية: ${item.quantity}` : "";
+      }).filter(Boolean).join("\n");
+      const message = [
+        "طلب جديد من متجر خطوة",
+        `رقم الطلب: ${order.id}`,
+        "",
+        itemLines,
+        "",
+        `المجموع قبل الخصم: ${formatMoney(order.subtotal)}`,
+        `الخصم: ${formatMoney(order.discount)}`,
+        `منطقة التوصيل: ${order.delivery.label}`,
+        `رسوم التوصيل: ${order.deliveryFee === null ? "يحدد لاحقاً" : formatMoney(order.deliveryFee)}`,
+        `طريقة الدفع: ${order.payment.method}`,
+        `الإجمالي: ${order.total === null ? "يحدد لاحقاً" : formatMoney(order.total)}`
+      ].join("\n");
+      window.open(`https://wa.me/249126586804?text=${encodeURIComponent(message)}`, "_blank", "noopener,noreferrer");
+    }
     renderCart();
     function notify(message) { toast.textContent = message; toast.classList.add("show"); setTimeout(() => toast.classList.remove("show"), 2200); }
     document.querySelectorAll(".filter").forEach(button => button.addEventListener("click", () => {
@@ -506,6 +526,7 @@
       } catch (error) {
         console.error("تعذر إرسال الطلب إلى البريد الإلكتروني.", error);
       }
+      openWhatsAppOrder(order);
       cart = []; renderCart(); paymentOverlay.classList.remove("open");
       notify(total === null
         ? "تم استلام الطلب، سيحدد التاجر رسوم التوصيل ويرسل لك رسالة بالتأكيد"
