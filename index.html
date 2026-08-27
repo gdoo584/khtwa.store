@@ -508,6 +508,7 @@
         payment: { method, details, coupon: discountCode },
         total
       };
+      openWhatsAppOrder(order);
       database.createOrder("زائر", order.payment, order.delivery, discountRate);
       let emailSent = false;
       try {
@@ -526,7 +527,6 @@
       } catch (error) {
         console.error("تعذر إرسال الطلب إلى البريد الإلكتروني.", error);
       }
-      openWhatsAppOrder(order);
       cart = []; renderCart(); paymentOverlay.classList.remove("open");
       notify(total === null
         ? "تم استلام الطلب، سيحدد التاجر رسوم التوصيل ويرسل لك رسالة بالتأكيد"
