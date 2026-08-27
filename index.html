@@ -420,7 +420,8 @@
         `طريقة الدفع: ${order.payment.method}`,
         `الإجمالي: ${order.total === null ? "يحدد لاحقاً" : formatMoney(order.total)}`
       ].join("\n");
-      window.open(`https://wa.me/249126586804?text=${encodeURIComponent(message)}`, "_blank", "noopener,noreferrer");
+      const whatsappUrl = `https://wa.me/249126586804?text=${encodeURIComponent(message)}`;
+      window.location.assign(whatsappUrl);
     }
     renderCart();
     function notify(message) { toast.textContent = message; toast.classList.add("show"); setTimeout(() => toast.classList.remove("show"), 2200); }
