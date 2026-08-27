@@ -12,6 +12,9 @@ PRODUCTS = [
     ("حذاء ستيب أبيض", "shoes", 289, "https://images.unsplash.com/photo-1552346154-21d32810aba3?auto=format&fit=crop&w=700&q=80"),
     ("تيشرت أساسي أبيض", "shirts", 119, "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=700&q=80"),
     ("سنيكرز كلاسيك أسود", "shoes", 329, "https://images.unsplash.com/photo-1495555961986-6d4c1ecb7be3?auto=format&fit=crop&w=700&q=80"),
+    ("تيشرت نسائي وردي", "women", 129, "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=700&q=80"),
+    ("تيشرت نسائي كلاسيك", "women", 139, "https://images.unsplash.com/photo-1506629905607-d9c297d95d0a?auto=format&fit=crop&w=700&q=80"),
+    ("تيشرت نسائي أسود", "women", 149, "https://images.unsplash.com/photo-1485968579580-b6d095142e6e?auto=format&fit=crop&w=700&q=80"),
 ]
 
 def connection():

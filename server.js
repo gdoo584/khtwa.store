@@ -11,7 +11,7 @@ database.exec(`
   CREATE TABLE IF NOT EXISTS products (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
-    category TEXT NOT NULL CHECK (category IN ('shoes', 'shirts')),
+    category TEXT NOT NULL CHECK (category IN ('shoes', 'shirts', 'women')),
     price_sar INTEGER NOT NULL CHECK (price_sar >= 0),
     image TEXT NOT NULL,
     active INTEGER NOT NULL DEFAULT 1,
@@ -47,7 +47,10 @@ if (!productCount) {
     ["حذاء جري فليكس", "shoes", 279, "https://images.unsplash.com/photo-1608231387042-66d1773070a5?auto=format&fit=crop&w=700&q=80"],
     ["تيشرت يومي بيج", "shirts", 129, "https://images.unsplash.com/photo-1576566588028-4147f3842f27?auto=format&fit=crop&w=700&q=80"],
     ["حذاء أبيض ستريت", "shoes", 299, "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?auto=format&fit=crop&w=700&q=80"],
-    ["تيشرت كاجوال أخضر", "shirts", 139, "https://images.unsplash.com/photo-1627225924765-552d49cf47ad?auto=format&fit=crop&w=700&q=80"]
+    ["تيشرت كاجوال أخضر", "shirts", 139, "https://images.unsplash.com/photo-1627225924765-552d49cf47ad?auto=format&fit=crop&w=700&q=80"],
+    ["تيشرت نسائي وردي", "women", 129, "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=700&q=80"],
+    ["تيشرت نسائي كلاسيك", "women", 139, "https://images.unsplash.com/photo-1506629905607-d9c297d95d0a?auto=format&fit=crop&w=700&q=80"],
+    ["تيشرت نسائي أسود", "women", 149, "https://images.unsplash.com/photo-1485968579580-b6d095142e6e?auto=format&fit=crop&w=700&q=80"]
   ];
   const seedProducts = database.transaction(() => seed.forEach(product => insert.run(...product)));
   seedProducts();
