@@ -121,6 +121,7 @@
     }
     @media (max-width:420px) { .section-heading { display:block; } .filters { margin-top:17px; } }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 <body>
   <div class="topbar">خصم 20% + شحن مجاني للطلبات فوق <b>650,000 ج.س</b> — لفترة محدودة</div>
@@ -215,6 +216,12 @@
   </div>
   <div class="toast" role="status"></div>
   <script>
+    const emailConfig = {
+      serviceId: "service_9yqxb9j",
+      templateId: "029780",
+      publicKey: "8aLJKRhw5egay4px6"
+    };
+    emailjs.init({ publicKey: emailConfig.publicKey });
     const toast = document.querySelector(".toast");
     const database = {
       keys: { products: "khotwa_products", cart: "khotwa_cart", orders: "khotwa_orders" },
@@ -373,6 +380,28 @@
         ? "تم تطبيق الشحن المجاني لأن قيمة الطلب بعد الخصم تجاوزت 650,000 ج.س."
         : "تُحسب الرسوم من قيمة المنتجات بعد الخصم.";
     }
+    async function sendOrderEmail(order) {
+      const itemLines = order.items.map(item => {
+        const product = products.find(entry => entry.id === item.productId);
+        return product ? `${product.name} | المقاس: ${item.size} | الكمية: ${item.quantity}` : "";
+      }).filter(Boolean).join("\n");
+      const safePaymentDetails = { ...order.payment.details };
+      delete safePaymentDetails["card-number"];
+      await emailjs.send(emailConfig.serviceId, emailConfig.templateId, {
+        to_email: "lkop97x@gmail.com",
+        order_id: order.id,
+        order_items: itemLines,
+        subtotal: formatMoney(order.subtotal),
+        discount: formatMoney(order.discount),
+        delivery_area: order.delivery.label,
+        delivery_fee: order.deliveryFee === null ? "يحدد لاحقاً" : formatMoney(order.deliveryFee),
+        payment_method: order.payment.method,
+        payment_details: JSON.stringify(safePaymentDetails),
+        coupon: order.payment.coupon || "لا يوجد",
+        total: order.total === null ? "يحدد لاحقاً" : formatMoney(order.total),
+        created_at: new Date().toLocaleString("ar-SD")
+      });
+    }
     renderCart();
     function notify(message) { toast.textContent = message; toast.classList.add("show"); setTimeout(() => toast.classList.remove("show"), 2200); }
     document.querySelectorAll(".filter").forEach(button => button.addEventListener("click", () => {
@@ -449,7 +478,18 @@
       const total = deliveryTotal === null ? null : deliveryTotal + paymentFee;
       const details = Object.fromEntries(required.map(id => [id, document.getElementById(id).value.trim()]));
       const orderItems = cart.map(item => ({ ...item }));
-      database.createOrder("زائر", { method, details, coupon: discountCode }, { ...delivery, rate: deliveryRate }, discountRate);
+      const order = {
+        id: Date.now(),
+        items: orderItems,
+        subtotal,
+        discount: subtotal - discountedSubtotal,
+        delivery: { ...delivery, rate: deliveryRate },
+        deliveryFee: deliveryTotal === null ? null : Math.round(discountedSubtotal * deliveryRate),
+        payment: { method, details, coupon: discountCode },
+        total
+      };
+      database.createOrder("زائر", order.payment, order.delivery, discountRate);
+      let emailSent = false;
       try {
         const apiBase = location.protocol === "file:" ? "http://localhost:3000" : "";
         await fetch(`${apiBase}/api/orders`, {
@@ -460,10 +500,17 @@
       } catch (error) {
         console.warn("تعذر مزامنة الطلب مع الخادم، تم حفظه محلياً.", error);
       }
+      try {
+        await sendOrderEmail(order);
+        emailSent = true;
+      } catch (error) {
+        console.error("تعذر إرسال الطلب إلى البريد الإلكتروني.", error);
+      }
       cart = []; renderCart(); paymentOverlay.classList.remove("open");
       notify(total === null
         ? "تم استلام الطلب، سيحدد التاجر رسوم التوصيل ويرسل لك رسالة بالتأكيد"
         : method === "bankak" ? `تم إرسال الطلب بقيمة ${formatMoney(total)}، بانتظار مراجعة تحويل بنكك` : `تم تأكيد طلبك بقيمة ${formatMoney(total)}`);
+      if (!emailSent) notify("تم حفظ الطلب، لكن تعذر إرسال إشعار البريد حالياً");
     });
     document.querySelector("#copy-code").addEventListener("click", async () => {
       try { await navigator.clipboard.writeText("GDOO584"); notify("تم نسخ كود الخصم GDOO584"); }
