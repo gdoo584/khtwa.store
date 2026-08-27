@@ -448,7 +448,8 @@
       const orderItems = cart.map(item => ({ ...item }));
       database.createOrder("زائر", { method, details, coupon: discountCode }, { ...delivery, rate: deliveryRate }, discountRate);
       try {
-        await fetch("http://localhost:3000/api/orders", {
+        const apiBase = location.protocol === "file:" ? "http://localhost:3000" : "";
+        await fetch(`${apiBase}/api/orders`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ customerName: "زائر", items: orderItems, subtotal, discount: subtotal - discountedSubtotal, deliveryFee: deliveryTotal === null ? null : Math.round(discountedSubtotal * deliveryRate), paymentFee, total, delivery: { ...delivery, rate: deliveryRate }, payment: { method, details, coupon: discountCode } })

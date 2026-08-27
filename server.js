@@ -4,6 +4,7 @@ const fs = require("node:fs");
 const Database = require("better-sqlite3");
 
 const port = Number(process.env.PORT) || 3000;
+const host = process.env.HOST || "0.0.0.0";
 const database = new Database(path.join(process.env.DATA_DIR || __dirname, "khotwa.sqlite"));
 database.pragma("journal_mode = WAL");
 database.exec(`
@@ -114,4 +115,4 @@ const server = http.createServer(async (request, response) => {
   }
 });
 
-server.listen(port, () => console.log(`Khotwa store running at http://localhost:${port}`));
+server.listen(port, host, () => console.log(`Khotwa store running on ${host}:${port}`));

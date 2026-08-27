@@ -100,6 +100,7 @@ class Handler(SimpleHTTPRequestHandler):
             return self.end_json(400, {"error": "بيانات الطلب غير صالحة"})
 
 os.chdir(ROOT)
-server = ThreadingHTTPServer(("127.0.0.1", 3000), Handler)
-print("Khotwa store: http://localhost:3000")
+port = int(os.environ.get("PORT", "3000"))
+server = ThreadingHTTPServer(("0.0.0.0", port), Handler)
+print(f"Khotwa store: http://localhost:{port}")
 server.serve_forever()
