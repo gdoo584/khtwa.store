@@ -1,0 +1,12 @@
+{
+  "name": "khotwa-store",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Backend for Khotwa shoes and t-shirts store",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.7.0"
+  }
+}
