@@ -8,48 +8,63 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <style>
-    :root { --ink:#171717; --muted:#77736d; --cream:#f6f3ee; --orange:#ff5a36; --line:#ded9d1; --white:#fff; }
+    :root { --ink:#171717; --muted:#77736d; --cream:#f6f3ee; --orange:#ff5a36; --orange-soft:#ffb39f; --line:#ded9d1; --white:#fff; --shadow: rgba(23,23,23,.12); }
     * { box-sizing:border-box; }
-    body { margin:0; color:var(--ink); background:var(--cream); font-family:"Cairo", sans-serif; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:linear-gradient(180deg, #f8f2ed 0%, #f6f3ee 35%, #f2efe9 100%); font-family:"Cairo", sans-serif; position:relative; }
+    body::before { content:""; position:fixed; inset:0; background:radial-gradient(circle at top left, rgba(255,90,54,.08), transparent 28%), radial-gradient(circle at bottom right, rgba(23,23,23,.04), transparent 30%); pointer-events:none; z-index:-1; }
     button, input { font:inherit; }
     button { cursor:pointer; border:0; }
     .topbar { color:#fff; background:var(--ink); text-align:center; font-size:12px; padding:8px 16px; letter-spacing:.3px; }
     .topbar b { color:#ffb39f; }
-    header { max-width:1240px; margin:auto; padding:22px 28px 12px; display:flex; align-items:center; gap:30px; }
+    header { position:sticky; top:0; z-index:8; max-width:1240px; margin:0 auto; padding:18px 28px 10px; display:flex; align-items:center; gap:30px; background:rgba(246,243,238,.8); backdrop-filter:blur(10px); }
     .logo { font-size:29px; font-weight:900; letter-spacing:-1.5px; white-space:nowrap; }
     .logo span { color:var(--orange); }
     nav { display:flex; gap:26px; margin:auto; font-weight:700; font-size:14px; }
-    nav a { color:inherit; text-decoration:none; }
+    nav a { color:inherit; text-decoration:none; position:relative; transition:.2s; }
+    nav a::after { content:""; position:absolute; right:0; left:0; bottom:-8px; height:2px; border-radius:999px; opacity:0; background:var(--orange); transform:scaleX(.7); transition:.2s; }
+    nav a:hover::after, nav a.active::after { opacity:1; transform:scaleX(1); }
     nav a:hover, nav a.active { color:var(--orange); }
     .header-actions { display:flex; align-items:center; gap:12px; }
-    .icon-btn { background:transparent; font-size:21px; position:relative; padding:4px; }
+    .icon-btn { background:transparent; font-size:21px; position:relative; padding:4px; border-radius:10px; transition:.2s; }
+    .icon-btn:hover { background:#fff; box-shadow:0 8px 18px rgba(0,0,0,.06); }
     .cart-count { position:absolute; top:-6px; right:-7px; color:#fff; background:var(--orange); border-radius:50%; font-size:10px; width:18px; height:18px; display:grid; place-items:center; }
-    .hero { max-width:1184px; margin:18px auto 70px; min-height:460px; border-radius:26px; overflow:hidden; color:#fff; background:#242424; display:grid; grid-template-columns:1.05fr .95fr; }
-    .hero-copy { padding:65px 62px; align-self:center; }
+    .hero { max-width:1184px; margin:18px auto 70px; min-height:460px; border-radius:26px; overflow:hidden; color:#fff; background:linear-gradient(120deg, #1d1d1d 0%, #2b211f 40%, #1d1d1d 100%); display:grid; grid-template-columns:1.05fr .95fr; box-shadow:0 28px 60px rgba(0,0,0,.12); }
+    .hero-copy { padding:65px 62px; align-self:center; position:relative; }
+    .hero-copy::before { content:""; position:absolute; inset:25px auto 25px 0; width:1px; background:linear-gradient(180deg, transparent, rgba(255,255,255,.4), transparent); }
     .eyebrow { color:#ffac98; font-size:12px; font-weight:800; letter-spacing:2px; }
     h1 { margin:12px 0 18px; font-size:clamp(42px, 6vw, 78px); line-height:1.08; letter-spacing:-3px; }
     .hero-copy p { color:#d2d0cd; max-width:430px; line-height:1.9; margin:0 0 28px; }
-    .primary { color:#fff; background:var(--orange); border-radius:6px; padding:13px 25px; font-weight:800; transition:transform .2s, background .2s; }
-    .primary:hover { background:#e94724; transform:translateY(-2px); }
-    .hero-photo { min-height:460px; background:linear-gradient(90deg, rgba(36,36,36,.1), transparent), url("https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=1000&q=85") center/cover; }
+    .hero-actions { display:flex; flex-wrap:wrap; align-items:center; gap:12px; margin-bottom:24px; }
+    .primary { color:#fff; background:linear-gradient(135deg, var(--orange) 0%, #ff7d62 100%); border-radius:10px; padding:13px 25px; font-weight:800; transition:transform .2s, box-shadow .2s, background .2s; box-shadow:0 18px 30px rgba(255,90,54,.25); }
+    .primary:hover { background:linear-gradient(135deg, #e94724 0%, #ff7548 100%); transform:translateY(-2px); box-shadow:0 22px 36px rgba(255,90,54,.3); }
+    .secondary { color:var(--ink); background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.25); border-radius:10px; padding:13px 22px; font-weight:800; text-decoration:none; }
+    .secondary:hover { background:rgba(255,255,255,.2); }
+    .hero-stats { display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:12px; max-width:430px; }
+    .stat { background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); border-radius:12px; padding:14px 10px; text-align:center; }
+    .stat strong { display:block; font-size:18px; }
+    .stat span { color:#d2d0cd; font-size:11px; }
+    .hero-photo { min-height:460px; background:linear-gradient(90deg, rgba(36,36,36,.1), transparent), url("https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=1000&q=85") center/cover; position:relative; }
+    .hero-photo::after { content:"أفضل فئة هذا الموسم"; position:absolute; left:24px; bottom:22px; background:rgba(255,255,255,.15); border:1px solid rgba(255,255,255,.2); backdrop-filter:blur(6px); padding:9px 16px; border-radius:999px; font-size:12px; font-weight:700; }
     .section { max-width:1184px; margin:0 auto 80px; padding:0 16px; }
     .section-heading { display:flex; align-items:end; justify-content:space-between; margin-bottom:22px; }
     h2 { font-size:29px; margin:0; letter-spacing:-1px; }
     .section-heading p { color:var(--muted); font-size:13px; margin:7px 0 0; }
     .filters { display:flex; gap:9px; flex-wrap:wrap; }
-    .filter { padding:9px 18px; border-radius:100px; background:transparent; border:1px solid var(--line); color:var(--muted); font-weight:700; font-size:12px; }
+    .filter { padding:9px 18px; border-radius:100px; background:transparent; border:1px solid var(--line); color:var(--muted); font-weight:700; font-size:12px; transition:.2s; }
     .filter.selected, .filter:hover { color:#fff; background:var(--ink); border-color:var(--ink); }
     .product-grid { display:grid; grid-template-columns:repeat(4, 1fr); gap:17px; }
-    .product-card { position:relative; min-width:0; }
-    .product-image { background:#ebe7e0; aspect-ratio:1/1.08; overflow:hidden; border-radius:14px; position:relative; perspective:900px; }
+    .product-card { position:relative; min-width:0; transition:transform .25s ease, box-shadow .25s ease; }
+    .product-card:hover { transform:translateY(-4px); }
+    .product-image { background:#ebe7e0; aspect-ratio:1/1.08; overflow:hidden; border-radius:14px; position:relative; perspective:900px; box-shadow:0 20px 28px rgba(0,0,0,.05); }
     .product-image img { width:100%; height:100%; object-fit:cover; transition:transform .8s cubic-bezier(.2,.75,.25,1), filter .8s, opacity .22s ease; transform-origin:center; backface-visibility:hidden; }
     .product-image img.image-changing { opacity:.15; }
     .product-card:hover .product-image img { transform:rotateY(12deg) rotateZ(-2deg) scale(1.07); filter:saturate(1.08) contrast(1.03); }
-    .product-card:hover .product-image { box-shadow:0 16px 30px rgba(23,23,23,.15); }
+    .product-card:hover .product-image { box-shadow:0 22px 32px rgba(23,23,23,.12); }
     .tag { position:absolute; top:12px; right:12px; z-index:1; background:var(--orange); color:#fff; border-radius:4px; padding:4px 9px; font-size:10px; font-weight:800; }
-    .add { position:absolute; left:12px; bottom:12px; width:39px; height:39px; border-radius:50%; background:#fff; font-size:22px; opacity:0; transform:translateY(6px); transition:.25s; }
+    .add { position:absolute; left:12px; bottom:12px; width:39px; height:39px; border-radius:50%; background:#fff; font-size:22px; opacity:0; transform:translateY(6px); transition:.25s; box-shadow:0 10px 18px rgba(0,0,0,.08); }
     .product-card:hover .add { opacity:1; transform:translateY(0); }
-    .favorite { position:absolute; top:12px; left:12px; width:32px; height:32px; border-radius:50%; background:#fff; color:#777; z-index:2; font-size:17px; }
+    .favorite { position:absolute; top:12px; left:12px; width:32px; height:32px; border-radius:50%; background:#fff; color:#777; z-index:2; font-size:17px; box-shadow:0 8px 18px rgba(0,0,0,.08); }
     .favorite.saved { color:var(--orange); }
     .product-info { padding:12px 4px; }
     .product-info h3 { font-size:14px; margin:0 0 3px; }
@@ -57,8 +72,28 @@
     .size-select { width:100%; border:1px solid var(--line); border-radius:6px; background:#fff; padding:7px; font-size:11px; margin:4px 0 8px; }
     .price { font-size:14px; font-weight:900; }
     .price del { color:#aaa; font-weight:400; font-size:11px; margin-right:7px; }
-    .promo { max-width:1184px; margin:0 auto 80px; padding:35px 45px; border-radius:18px; background:#ded8cc; display:flex; justify-content:space-between; align-items:center; }
+    .promo { max-width:1184px; margin:0 auto 80px; padding:35px 45px; border-radius:20px; background:linear-gradient(135deg, #f1e1d4 0%, #f9d0ba 100%); display:flex; justify-content:space-between; align-items:center; box-shadow:0 22px 36px rgba(90,56,39,.08); }
     .promo h2 { font-size:25px; } .promo p { margin:6px 0 0; color:#68645d; font-size:13px; }
+    .feature-strip { max-width:1184px; margin:0 auto 80px; padding:0 16px; display:grid; grid-template-columns:repeat(4, minmax(0, 1fr)); gap:14px; }
+    .feature-card { background:#fff; border:1px solid rgba(23,23,23,.04); border-radius:16px; padding:18px; box-shadow:0 16px 30px rgba(23,23,23,.04); }
+    .feature-card .icon { width:42px; height:42px; display:grid; place-items:center; border-radius:12px; background:linear-gradient(135deg, #fff0e8, #ffe2d4); font-size:20px; margin-bottom:12px; }
+    .feature-card h3 { margin:0 0 6px; font-size:15px; }
+    .feature-card p { margin:0; color:var(--muted); font-size:12px; line-height:1.8; }
+    .reviews-grid { max-width:1184px; margin:0 auto 80px; padding:0 16px; display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:16px; }
+    .review-card { background:#fff; border-radius:18px; padding:22px 18px; box-shadow:0 15px 32px rgba(23,23,23,.04); }
+    .review-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+    .reviewer { display:flex; align-items:center; gap:10px; }
+    .review-avatar { width:42px; height:42px; display:grid; place-items:center; border-radius:50%; background:linear-gradient(135deg, #fff0e8, #ffdacc); font-weight:900; color:var(--orange); }
+    .reviewer h4 { margin:0; font-size:13px; }
+    .stars { color:#f7b32d; font-size:14px; }
+    .review-card p { margin:0; font-size:12px; line-height:1.9; color:#58544f; }
+    .cta-banner { max-width:1184px; margin:0 auto 80px; padding:0 16px; }
+    .cta-box { background:linear-gradient(135deg, #1b1b1b 0%, #2a1f1d 100%); border-radius:22px; padding:26px 24px; display:flex; justify-content:space-between; align-items:center; gap:20px; color:#fff; box-shadow:0 28px 50px rgba(23,23,23,.12); }
+    .cta-box h3 { margin:0 0 6px; font-size:24px; }
+    .cta-box p { margin:0; color:#d9d5d0; font-size:13px; }
+    .cta-actions { display:flex; gap:10px; flex-wrap:wrap; }
+    .floating-whatsapp { position:fixed; left:24px; bottom:24px; z-index:20; }
+    .floating-whatsapp a { display:flex; align-items:center; justify-content:center; width:60px; height:60px; border-radius:50%; background:linear-gradient(135deg, #15c35f 0%, #08a74d 100%); color:#fff; font-size:28px; box-shadow:0 18px 30px rgba(9,167,77,.35); text-decoration:none; }
     footer { background:var(--ink); color:#fff; padding:32px 7%; display:flex; justify-content:space-between; align-items:center; font-size:12px; }
     footer .logo { font-size:21px; } footer p { color:#a7a5a1; margin:0; }
     .contact-links { display:flex; align-items:center; gap:10px; }
@@ -172,7 +207,20 @@
   <input class="search-input" aria-label="ابحث عن منتج" placeholder="ابحث عن حذاء أو تيشرت..." style="position:absolute;top:67px;right:20px;left:20px;z-index:4">
   <main>
     <section class="hero">
-      <div class="hero-copy"><div class="eyebrow">مجموعة خريف 2024</div><h1>خطوتك<br><span style="color:#ff6948">الأفضل</span> تبدأ هنا.</h1><p>تصاميم صنعت لترافقك في كل خطوة. اكتشف تشكيلتنا الجديدة من الأحذية والتيشرتات.</p><a class="primary" href="#products">تسوق المجموعة ←</a></div>
+      <div class="hero-copy">
+        <div class="eyebrow">مجموعة خريف 2024</div>
+        <h1>خطوتك<br><span style="color:#ff6948">الأفضل</span> تبدأ هنا.</h1>
+        <p>تصاميم صنعت لترافقك في كل خطوة. اكتشف تشكيلتنا الجديدة من الأحذية والتيشرتات بألوان فاخرة وجودة ممتازة.</p>
+        <div class="hero-actions">
+          <a class="primary" href="#products">تسوق المجموعة ←</a>
+          <a class="secondary" href="https://wa.me/249909299040?text=%D8%A7%D9%87%D9%84%D8%A7%20%D8%A8%D9%83%D9%8A%20%D8%A7%D8%B1%D8%BA%D8%A8%20%D9%85%D9%84%D8%B3%D8%A4%D8%A7%D9%84%20%D8%A7%D9%84%D9%81%D8%A7%D8%AD%D9%82" target="_blank" rel="noopener noreferrer">تواصل واتساب</a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat"><strong>+4.9</strong><span>تقييمات</span></div>
+          <div class="stat"><strong>2K+</strong><span>عميل</span></div>
+          <div class="stat"><strong>24h</strong><span>توصيل سريع</span></div>
+        </div>
+      </div>
       <div class="hero-photo"></div>
     </section>
     <section class="section" id="products">
@@ -193,13 +241,94 @@
       </div>
     </section>
     <section class="benefits"><div class="benefit"><span class="benefit-icon">🚚</span><div><h3>توصيل سريع</h3><p>نوصّل طلبك بأمان إلى باب منزلك</p></div></div><div class="benefit"><span class="benefit-icon">↩</span><div><h3>استبدال سهل</h3><p>استبدل مقاسك خلال 7 أيام</p></div></div><div class="benefit"><span class="benefit-icon">✓</span><div><h3>جودة مضمونة</h3><p>منتجات مختارة بعناية</p></div></div></section>
-    <section class="promo" id="offers"><div><h2>خصم 20% لفترة محدودة</h2><p>وشحن مجاني للطلبات التي تتجاوز 650,000 ج.س</p></div><button class="primary" id="copy-code">استخدم العرض الآن</button></section>
+    <section class="feature-strip">
+      <div class="feature-card">
+        <div class="icon">🚚</div>
+        <h3>توصيل سريع</h3>
+        <p>خدمة توصيل موثوقة مع متابعة الطلب حتى الوصول إلى باب منزلك.</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon">🛍️</div>
+        <h3>تجربة شراء ممتعة</h3>
+        <p>واجهة سهلة ومرنة تجعل التسوق من نقطة الصفر إلى الطلب في دقائق.</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon">💎</div>
+        <h3>جودة مضمونة</h3>
+        <p>منتجات مختارة بعناية ومصنوعة لتدوم وتناسب أسلوبك اليومي.</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon">↩</div>
+        <h3>استبدال سهل</h3>
+        <p>سياسة مرنة للاستبدال والتعديل لضمان راحة العميل أولاً.</p>
+      </div>
+    </section>
+    <section class="section" id="reviews">
+      <div class="section-heading">
+        <div>
+          <h2>آراء عملائنا</h2>
+          <p>الناس يحبون جودة المنتج وراحة التسوق معنا</p>
+        </div>
+      </div>
+      <div class="reviews-grid">
+        <div class="review-card">
+          <div class="review-top">
+            <div class="reviewer">
+              <div class="review-avatar">م</div>
+              <h4>مريم</h4>
+            </div>
+            <div class="stars">★★★★★</div>
+          </div>
+          <p>المنتجات ممتازة والخدمة سريعة جدًا، خاصة التوصيل والاهتمام بالتفاصيل. أنصح الجميع بالتجربة.</p>
+        </div>
+        <div class="review-card">
+          <div class="review-top">
+            <div class="reviewer">
+              <div class="review-avatar">أ</div>
+              <h4>أحمد</h4>
+            </div>
+            <div class="stars">★★★★★</div>
+          </div>
+          <p>التصميم واضح والطلب سهل، والخصم كان فعالاً جدًا. استلمت الحذاء بشكل ممتاز وبتصميم أنيق.</p>
+        </div>
+        <div class="review-card">
+          <div class="review-top">
+            <div class="reviewer">
+              <div class="review-avatar">ن</div>
+              <h4>نادية</h4>
+            </div>
+            <div class="stars">★★★★★</div>
+          </div>
+          <p>بصراحة الموقع جداً جميل، سهل التعامل والقيمة مناسبة جدًا. سأعود للشراء مرة أخرى حتمًا.</p>
+        </div>
+      </div>
+    </section>
+    <section class="cta-banner">
+      <div class="cta-box">
+        <div>
+          <h3>استمتع بخصمك اليوم</h3>
+          <p>استخدم كود الخصم SHMT584 واحصل على خصم إضافي عند الطلب الأول.</p>
+        </div>
+        <div class="cta-actions">
+          <button class="primary" id="copy-code-cta">نسخ الكود</button>
+          <a class="secondary" href="https://wa.me/249909299040?text=%D8%A7%D8%B1%D8%BA%D8%A8%20%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%84%D8%A7%D9%87%20%D8%A8%D8%A7%D9%84%D9%83%D9%88%D8%AF%20%D8%A7%D9%84%D8%AE%D8%A7%D8%B5%20%D9%88%D8%A7%D9%84%D8%B3%D8%B9%D8%A7%D8%B1%20%D8%A7%D9%84%D8%AA%D8%B1%D8%A7%D8%A8%D9%8A" target="_blank" rel="noopener noreferrer">تواصل معنا</a>
+        </div>
+      </div>
+    </section>
+    <section class="promo" id="offers">
+      <div>
+        <h2>خصم 20% لفترة محدودة</h2>
+        <p>وشحن مجاني للطلبات التي تتجاوز 650,000 ج.س. استخدم الكود الخاص بك في السلة.</p>
+      </div>
+      <button class="primary" id="copy-code">نسخ كود SHMT584</button>
+    </section>
   </main>
+  <div class="floating-whatsapp"><a href="https://wa.me/249909299040?text=%D8%A7%D9%87%D9%84%D8%A7%20%D8%A8%D9%83%D9%8A%20%D8%A7%D9%84%D8%B4%D8%B1%D9%8A%D9%83%20%D8%A7%D9%84%D8%AC%D8%80%D9%8A%D8%AF%20%D8%A7%D9%84%D8%B9%D8%A7%D8%AF%D8%A9" target="_blank" rel="noopener noreferrer" aria-label="واتساب">✆</a></div>
   <footer>
     <div class="logo">خُطوة<span>.</span></div>
     <div class="contact-links" aria-label="طرق التواصل">
       <strong>تواصل معنا</strong>
-      <a class="contact-link" href="https://wa.me/249126586804" target="_blank" rel="noopener noreferrer" aria-label="واتساب">◉ واتساب</a>
+      <a class="contact-link" href="https://wa.me/249909299040" target="_blank" rel="noopener noreferrer" aria-label="واتساب">◉ واتساب</a>
       <a class="contact-link" href="https://www.instagram.com/O.SP_/" target="_blank" rel="noopener noreferrer" aria-label="إنستغرام">◎ إنستغرام</a>
       <a class="contact-link" href="https://x.com/ليخخ584" target="_blank" rel="noopener noreferrer" aria-label="منصة اكس">𝕏 منصة X</a>
     </div>
@@ -608,8 +737,14 @@
       if (!emailSent) notify("تم حفظ الطلب، لكن تعذر إرسال إشعار البريد حالياً");
     });
     document.querySelector("#copy-code").addEventListener("click", async () => {
-      try { await navigator.clipboard.writeText("GDOO584"); notify("تم نسخ كود الخصم GDOO584"); }
-      catch { notify("كود الخصم: GDOO584"); }
+      const couponCode = oneTimeCouponCode;
+      try { await navigator.clipboard.writeText(couponCode); notify(`تم نسخ كود الخصم ${couponCode}`); }
+      catch { notify(`كود الخصم: ${couponCode}`); }
+    });
+    document.querySelector("#copy-code-cta")?.addEventListener("click", async () => {
+      const couponCode = oneTimeCouponCode;
+      try { await navigator.clipboard.writeText(couponCode); notify(`تم نسخ كود الخصم ${couponCode}`); }
+      catch { notify(`كود الخصم: ${couponCode}`); }
     });
   </script>
 </body>
