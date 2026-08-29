@@ -526,14 +526,28 @@
     document.querySelector("#apply-coupon").addEventListener("click", () => {
       const code = document.querySelector("#coupon-code").value.trim().toUpperCase();
       const message = document.querySelector(".coupon-message");
-      const alreadyUsed = localStorage.getItem(couponStorageKey) === oneTimeCouponCode;
-      if (code === oneTimeCouponCode && !alreadyUsed) {
+      const usedCode = localStorage.getItem(couponStorageKey);
+      const alreadyUsed = Boolean(usedCode);
+
+      if (alreadyUsed) {
+        discountRate = 0;
+        discountCode = "";
+        message.textContent = `تم استخدام كود الخصم (${usedCode}) مسبقاً، ولا يمكن استخدام كود آخر بعده`;
+        updatePaymentAmount();
+        return;
+      }
+
+      if (code === oneTimeCouponCode) {
         localStorage.setItem(couponStorageKey, oneTimeCouponCode);
-        discountRate = 0.25; discountCode = code; message.textContent = "تم تطبيق خصم 25% بنجاح — هذا الكود صالح لمرة واحدة"; updatePaymentAmount();
-      } else if (alreadyUsed) {
-        discountRate = 0; discountCode = ""; message.textContent = "تم استخدام هذا الخصم من قبل، لا يمكن استخدامه مرة ثانية"; updatePaymentAmount();
+        discountRate = 0.25;
+        discountCode = code;
+        message.textContent = "تم تطبيق خصم 25% بنجاح — هذا الكود صالح لمرة واحدة فقط";
+        updatePaymentAmount();
       } else {
-        discountRate = 0; discountCode = ""; message.textContent = "كود الخصم غير صحيح"; updatePaymentAmount();
+        discountRate = 0;
+        discountCode = "";
+        message.textContent = "كود الخصم غير صحيح أو تم استخدام كود الخصم بالفعل";
+        updatePaymentAmount();
       }
     });
     document.querySelector(".close-payment").addEventListener("click", () => paymentOverlay.classList.remove("open"));
