@@ -67,6 +67,23 @@
     .contact-link:hover { color:#ff9a83; border-color:var(--orange); }
     .toast { position:fixed; bottom:22px; left:22px; color:#fff; background:var(--ink); padding:12px 18px; border-radius:8px; font-size:13px; opacity:0; transform:translateY(10px); pointer-events:none; transition:.3s; z-index:5; }
     .toast.show { opacity:1; transform:translateY(0); }
+    .welcome-overlay { position:fixed; inset:0; background:radial-gradient(circle at top, rgba(255,119,82,.25), rgba(23,23,23,.92) 52%); display:grid; place-items:center; z-index:20; padding:18px; }
+    .welcome-overlay.hidden { display:none; }
+    .welcome-card { position:relative; width:min(520px, 100%); background:linear-gradient(135deg, #fffaf6 0%, #ffe0d2 100%); border:1px solid rgba(255,90,54,.15); border-radius:24px; padding:30px 22px 22px; text-align:center; box-shadow:0 30px 80px rgba(0,0,0,.28); overflow:hidden; }
+    .firework { position:absolute; width:10px; height:10px; border-radius:50%; background:#ff5a36; box-shadow:0 0 18px rgba(255,90,54,.8); animation:explode 2.6s ease-in-out infinite; }
+    .firework:nth-child(1) { top:18%; left:17%; background:#ffb14a; animation-delay:.2s; }
+    .firework:nth-child(2) { top:14%; right:18%; background:#ff3282; animation-delay:.7s; }
+    .firework:nth-child(3) { bottom:18%; left:26%; background:#ffd166; animation-delay:1.1s; }
+    .firework:nth-child(4) { bottom:20%; right:22%; background:#7bdff2; animation-delay:1.5s; }
+    @keyframes explode { 0%, 100% { transform:scale(.7); opacity:.2; } 40% { transform:scale(1.4); opacity:1; } 70% { transform:scale(1.9); opacity:.75; } }
+    .welcome-badge { display:inline-block; background:#1a1a1a; color:#fff; border-radius:999px; padding:7px 14px; font-size:11px; font-weight:800; margin-bottom:16px; }
+    .welcome-card h2 { margin:0 0 8px; font-size:clamp(32px, 4vw, 48px); color:#171717; }
+    .welcome-card p { margin:0 0 18px; color:#5d544d; font-size:14px; line-height:1.8; }
+    .welcome-code-box { display:inline-block; background:#171717; color:#fff; padding:14px 22px; border-radius:12px; font-size:32px; font-weight:900; letter-spacing:2px; margin:10px auto 18px; box-shadow:0 13px 30px rgba(23,23,23,.22); }
+    .welcome-partners { margin:16px 0 20px; }
+    .welcome-partners strong { display:block; color:#171717; font-size:14px; margin-bottom:8px; }
+    .welcome-partners div { display:block; color:#4d453f; font-weight:700; font-size:16px; line-height:1.8; }
+    .welcome-close { margin-top:4px; }
     .cart-overlay { position:fixed; inset:0; background:rgba(0,0,0,.4); opacity:0; pointer-events:none; transition:.25s; z-index:8; }
     .cart-overlay.open { opacity:1; pointer-events:auto; }
     .cart-drawer { position:absolute; top:0; left:0; width:min(420px, 100%); height:100%; background:var(--white); padding:28px; transform:translateX(-100%); transition:.3s; display:flex; flex-direction:column; }
@@ -124,6 +141,24 @@
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 <body>
+  <div class="welcome-overlay" id="welcomeOverlay" aria-live="polite">
+    <div class="welcome-card">
+      <div class="firework"></div>
+      <div class="firework"></div>
+      <div class="firework"></div>
+      <div class="firework"></div>
+      <div class="welcome-badge">خصم حصري لمرة واحدة</div>
+      <h2>مرحباً بك في خطوة</h2>
+      <p>أحذية وتيشرتات بتصاميم تليق بك، وخصم خاص لك فور دخولك إلى المتجر.</p>
+      <div class="welcome-code-box">SHMT584</div>
+      <div class="welcome-partners">
+        <strong>شركاء النجاح</strong>
+        <div>شمت حسن</div>
+        <div>منيرة</div>
+      </div>
+      <button class="primary welcome-close">ابدأ التسوق</button>
+    </div>
+  </div>
   <div class="topbar" style="background:linear-gradient(90deg, #1a1a1a 0%, #2b1b18 45%, #1a1a1a 100%); color:#fff; font-weight:900; letter-spacing:0.3px; font-size:12px; padding:9px 16px;">
     <a href="https://wa.me/249909299040?text=%D9%85%20%D8%AA%D8%AD%D9%84%D9%85%D9%8A%20%D8%AA%D8%B4%D9%88%D9%81%D9%8A%20%D9%82%D8%B1%D9%88%D9%88%D8%B4%20%D9%83%D8%AA%D9%8A%D8%B1%D8%A9%20%D9%85%D9%86%20%D8%A7%D9%84%D9%85%D8%AD%D8%B3%D9%8A%20%D9%87%D9%87%D9%87%D9%87%D9%87%D9%87%D9%87%D9%87%D9%87%D9%87%D9%87%D9%87%D9%87%D9%87%D9%87%D9%87%D9%87%D9%87%D9%87" target="_blank" rel="noopener noreferrer" style="display:inline-block; background:#ff5a36; color:#fff; border-radius:999px; padding:5px 10px; font-size:10px; margin-left:10px; text-decoration:none;">شريك جديد</a>
     <a href="https://wa.me/249909299040?text=%D9%85%20%D8%AA%D8%AD%D9%84%D9%85%D9%8A%20%D8%AA%D8%B4%D9%88%D9%81%D9%8A%20%D9%82%D8%B1%D9%88%D9%88%D8%B4%20%D9%83%D8%AA%D9%8A%D8%B1%D8%A9%20%D9%85%D9%86%20%D8%A7%D9%84%D9%85%D8%AD%D8%B3%D9%8A%20%D9%87%D9%87%D9%87%D9%87%D9%87%D9%87%D9%87%D9%87%D9%87%D9%87%D9%87%D9%87%D9%87%D9%87%D9%87%D9%87%D9%87%D9%87%D9%87" target="_blank" rel="noopener noreferrer" style="color:#ffb39f; text-decoration:none;">منيرة</a>
@@ -227,6 +262,22 @@
     };
     emailjs.init({ publicKey: emailConfig.publicKey });
     const toast = document.querySelector(".toast");
+    const welcomeOverlay = document.getElementById("welcomeOverlay");
+    const welcomeCloseButton = document.querySelector(".welcome-close");
+    const couponStorageKey = "khotwa_coupon_used";
+    const oneTimeCouponCode = "SHMT584";
+    if (welcomeCloseButton) {
+      welcomeCloseButton.addEventListener("click", () => {
+        welcomeOverlay.classList.add("hidden");
+        const couponField = document.getElementById("coupon-code");
+        if (couponField) couponField.value = oneTimeCouponCode;
+      });
+    }
+    if (!localStorage.getItem(couponStorageKey)) {
+      setTimeout(() => {
+        if (welcomeOverlay) welcomeOverlay.classList.remove("hidden");
+      }, 250);
+    }
     const database = {
       keys: { products: "khotwa_products", cart: "khotwa_cart", orders: "khotwa_orders" },
       read(key, fallback) {
@@ -475,8 +526,12 @@
     document.querySelector("#apply-coupon").addEventListener("click", () => {
       const code = document.querySelector("#coupon-code").value.trim().toUpperCase();
       const message = document.querySelector(".coupon-message");
-      if (code === "GDOO584") {
-        discountRate = 0.25; discountCode = code; message.textContent = "تم تطبيق خصم 25% بنجاح"; updatePaymentAmount();
+      const alreadyUsed = localStorage.getItem(couponStorageKey) === oneTimeCouponCode;
+      if (code === oneTimeCouponCode && !alreadyUsed) {
+        localStorage.setItem(couponStorageKey, oneTimeCouponCode);
+        discountRate = 0.25; discountCode = code; message.textContent = "تم تطبيق خصم 25% بنجاح — هذا الكود صالح لمرة واحدة"; updatePaymentAmount();
+      } else if (alreadyUsed) {
+        discountRate = 0; discountCode = ""; message.textContent = "تم استخدام هذا الخصم من قبل، لا يمكن استخدامه مرة ثانية"; updatePaymentAmount();
       } else {
         discountRate = 0; discountCode = ""; message.textContent = "كود الخصم غير صحيح"; updatePaymentAmount();
       }
