@@ -102,6 +102,55 @@
     .contact-link:hover { color:#ff9a83; border-color:var(--orange); }
     .toast { position:fixed; bottom:22px; left:22px; color:#fff; background:var(--ink); padding:12px 18px; border-radius:8px; font-size:13px; opacity:0; transform:translateY(10px); pointer-events:none; transition:.3s; z-index:5; }
     .toast.show { opacity:1; transform:translateY(0); }
+    @keyframes slideInRight { from { opacity:0; transform:translateX(60px) rotateY(25deg); } to { opacity:1; transform:translateX(0) rotateY(0); } }
+    @keyframes fadeInUp { from { opacity:0; transform:translateY(30px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes rotateBg { from { transform:rotate(0deg); } to { transform:rotate(360deg); } }
+    .auth-overlay { position:fixed; inset:0; background:linear-gradient(135deg, rgba(26,26,26,.95) 0%, rgba(231,76,60,.3) 100%); backdrop-filter:blur(12px); display:grid; place-items:center; opacity:0; pointer-events:none; transition:.5s cubic-bezier(.34,.1,.68,1); z-index:15; padding:18px; }
+    .auth-overlay.open { opacity:1; pointer-events:auto; }
+    .auth-container { width:min(950px, 100%); background:linear-gradient(135deg, #1a1a1a 0%, #2d1010 100%); border-radius:32px; box-shadow:0 60px 120px rgba(0,0,0,.6), inset 0 1px 0 rgba(231,76,60,.2); overflow:hidden; display:grid; grid-template-columns:1.1fr 0.9fr; position:relative; }
+    @media (max-width: 768px) { .auth-container { grid-template-columns:1fr; } }
+    .auth-container::before { content:""; position:absolute; inset:0; background:radial-gradient(circle at 20% 50%, rgba(231,76,60,.15) 0%, transparent 50%), radial-gradient(circle at 80% -20%, rgba(255,255,255,.05) 0%, transparent 60%); pointer-events:none; z-index:1; }
+    .auth-header { background:linear-gradient(180deg, #1a1a1a 0%, #0f0f0f 100%); padding:60px 40px; color:#fff; text-align:right; position:relative; overflow:hidden; display:flex; flex-direction:column; justify-content:center; align-items:flex-end; z-index:2; }
+    .auth-header::before { content:""; position:absolute; top:-40%; right:-20%; width:400px; height:400px; background:radial-gradient(circle, rgba(231,76,60,.25) 0%, transparent 70%); border-radius:50%; animation:rotateBg 20s linear infinite; }
+    .auth-header::after { content:""; position:absolute; bottom:-30%; left:-10%; width:350px; height:350px; background:radial-gradient(circle, rgba(255,0,0,.15) 0%, transparent 70%); border-radius:50%; animation:rotateBg 25s linear infinite reverse; }
+    .auth-header h2 { margin:0 0 18px; font-size:42px; font-weight:900; position:relative; z-index:3; letter-spacing:-1px; text-shadow:0 4px 20px rgba(0,0,0,.5); }
+    .auth-header p { margin:0; color:rgba(255,255,255,.85); font-size:15px; position:relative; z-index:3; line-height:1.8; max-width:300px; }
+    .auth-body { padding:50px 40px; display:flex; flex-direction:column; justify-content:center; position:relative; background:linear-gradient(135deg, rgba(26,26,26,.8) 0%, rgba(45,16,16,.3) 100%); z-index:2; }
+    .auth-form { display:flex; flex-direction:column; gap:18px; position:relative; z-index:3; animation:fadeInUp .8s ease-out; }
+    .auth-input-group { display:flex; flex-direction:column; gap:8px; animation:fadeInUp .8s ease-out backwards; position:relative; }
+    .auth-input-group:nth-child(1) { animation-delay:.1s; }
+    .auth-input-group:nth-child(2) { animation-delay:.2s; }
+    .auth-input-group:nth-child(3) { animation-delay:.3s; }
+    .auth-input-group:nth-child(4) { animation-delay:.4s; }
+    .password-toggle { position:absolute; right:14px; top:38px; background:none; border:none; color:#e74c3c; cursor:pointer; font-size:18px; transition:.3s; padding:4px; }
+    .password-toggle:hover { color:#ff6b5b; transform:scale(1.2); }
+    @keyframes curtainSlideLeft { from { transform:translateX(100%); opacity:0; } to { transform:translateX(0); opacity:1; } }
+    .auth-body.slide-mode { animation:curtainSlideLeft .6s cubic-bezier(.34,.1,.68,1); }
+    .auth-input-label { font-size:13px; font-weight:800; color:#e74c3c; display:flex; align-items:center; gap:6px; text-transform:uppercase; letter-spacing:.5px; }
+    .auth-input { width:100%; padding:15px 18px; border:2px solid rgba(231,76,60,.3); border-radius:12px; font-size:14px; background:rgba(255,255,255,.08); color:#fff; transition:.4s cubic-bezier(.34,.1,.68,1); position:relative; font-family:inherit; }
+    .auth-input::placeholder { color:rgba(255,255,255,.5); }
+    .auth-input:focus { outline:none; border-color:#e74c3c; background:rgba(255,255,255,.12); box-shadow:0 0 0 3px rgba(231,76,60,.2), inset 0 0 20px rgba(231,76,60,.08); }
+    .auth-button { width:100%; padding:16px 24px; background:linear-gradient(135deg, #e74c3c 0%, #c0392b 50%, #a93226 100%); color:#fff; border:0; border-radius:12px; font-weight:900; cursor:pointer; transition:.4s cubic-bezier(.34,.1,.68,1); font-size:15px; position:relative; overflow:hidden; box-shadow:0 15px 40px rgba(231,76,60,.3), inset 0 1px 0 rgba(255,255,255,.1); text-transform:uppercase; letter-spacing:.5px; }
+    .auth-button::before { content:""; position:absolute; inset:0; background:linear-gradient(90deg, transparent, rgba(255,255,255,.2), transparent); transform:translateX(-100%); transition:.6s; }
+    .auth-button:hover { transform:translateY(-4px) scale(1.02); box-shadow:0 20px 50px rgba(231,76,60,.4), inset 0 1px 0 rgba(255,255,255,.15); }
+    .auth-button:hover::before { transform:translateX(100%); }
+    .auth-button:disabled { opacity:.6; cursor:not-allowed; }
+    .auth-toggle { text-align:center; margin-top:20px; color:rgba(255,255,255,.7); font-size:13px; position:relative; z-index:3; }
+    .auth-toggle a { color:#e74c3c; text-decoration:none; cursor:pointer; font-weight:800; transition:.3s; }
+    .auth-toggle a:hover { color:#ff6b5b; text-shadow:0 0 10px rgba(231,76,60,.5); }
+    .close-auth { position:absolute; top:20px; right:20px; background:rgba(231,76,60,.2); color:#fff; border:1px solid rgba(231,76,60,.4); border-radius:50%; width:44px; height:44px; font-size:26px; cursor:pointer; transition:.4s; z-index:10; backdrop-filter:blur(6px); display:flex; align-items:center; justify-content:center; }
+    .close-auth:hover { background:rgba(231,76,60,.4); transform:rotate(90deg); box-shadow:0 0 20px rgba(231,76,60,.3); }
+    .auth-divider { display:flex; align-items:center; gap:12px; margin:20px 0; position:relative; z-index:3; }
+    .auth-divider::before, .auth-divider::after { content:""; flex:1; height:1px; background:linear-gradient(90deg, transparent, rgba(231,76,60,.3), transparent); }
+    .auth-divider span { color:rgba(255,255,255,.6); font-size:12px; font-weight:700; }
+    .user-menu { position:relative; }
+    .user-menu-trigger { display:flex; align-items:center; gap:8px; cursor:pointer; padding:8px 14px; border-radius:10px; transition:.2s; }
+    .user-menu-trigger:hover { background:var(--cream); }
+    .user-menu-dropdown { position:absolute; top:100%; right:0; background:#fff; border:1px solid var(--line); border-radius:10px; box-shadow:0 10px 25px rgba(23,23,23,.1); overflow:hidden; opacity:0; pointer-events:none; transform:translateY(-8px); transition:.2s; z-index:25; min-width:200px; }
+    .user-menu-dropdown.open { opacity:1; pointer-events:auto; transform:translateY(0); }
+    .user-menu-item { display:block; width:100%; padding:12px 16px; border:0; background:none; text-align:right; cursor:pointer; color:var(--ink); font-size:13px; border-bottom:1px solid var(--line); transition:.2s; }
+    .user-menu-item:hover { background:var(--cream); }
+    .user-menu-item:last-child { border-bottom:none; }
     .welcome-overlay { position:fixed; inset:0; background:radial-gradient(circle at top, rgba(255,119,82,.25), rgba(23,23,23,.92) 52%); display:grid; place-items:center; z-index:20; padding:18px; }
     .welcome-overlay.hidden { display:none; }
     .welcome-card { position:relative; width:min(520px, 100%); background:linear-gradient(135deg, #fffaf6 0%, #ffe0d2 100%); border:1px solid rgba(255,90,54,.15); border-radius:24px; padding:30px 22px 22px; text-align:center; box-shadow:0 30px 80px rgba(0,0,0,.28); overflow:hidden; }
@@ -202,7 +251,18 @@
   <header>
     <div class="logo">خُطوة<span>.</span></div>
     <nav><a class="active" href="#products">الرئيسية</a><a href="#products">الأحذية</a><a href="#products">التيشرتات</a><a href="#offers">العروض</a></nav>
-    <div class="header-actions"><button class="icon-btn" aria-label="البحث">⌕</button><button class="icon-btn" aria-label="سلة المشتريات">♧<i class="cart-count">0</i></button></div>
+    <div class="header-actions">
+      <button class="icon-btn" aria-label="البحث">⌕</button>
+      <button class="icon-btn" aria-label="سلة المشتريات">♧<i class="cart-count">0</i></button>
+      <div class="user-menu">
+        <button class="user-menu-trigger" id="user-menu-btn" aria-label="قائمة المستخدم">👤 <span id="user-display">دخول</span></button>
+        <div class="user-menu-dropdown" id="user-menu-dropdown">
+          <button class="user-menu-item" id="profile-btn">الملف الشخصي</button>
+          <button class="user-menu-item" id="orders-btn">طلباتي</button>
+          <button class="user-menu-item" id="logout-btn" style="display:none; color:#c14932;">تسجيل خروج</button>
+        </div>
+      </div>
+    </div>
   </header>
   <input class="search-input" aria-label="ابحث عن منتج" placeholder="ابحث عن حذاء أو تيشرت..." style="position:absolute;top:67px;right:20px;left:20px;z-index:4">
   <main>
@@ -334,6 +394,50 @@
     </div>
     <p>© 2024 خطوة — كل خطوة تحكي قصة.</p>
   </footer>
+  <div class="auth-overlay" id="authOverlay">
+    <div class="auth-container">
+      <div class="auth-header">
+        <h2 id="auth-title">تسجيل الدخول</h2>
+        <p id="auth-subtitle">انضم إلى عائلة خطوة واستمتع بتجربة تسوق فريدة</p>
+      </div>
+      <div class="auth-body">
+        <form class="auth-form" id="auth-form">
+          <div class="auth-input-group">
+            <label class="auth-input-label" for="auth-email">البريد</label>
+            <input type="email" class="auth-input" id="auth-email" placeholder="example@mail.com" required>
+          </div>
+          
+          <div class="auth-input-group">
+            <label class="auth-input-label" for="auth-password">الرقم السري</label>
+            <div style="position:relative;">
+              <input type="password" class="auth-input" id="auth-password" placeholder="••••••••" required>
+              <button type="button" class="password-toggle" id="password-toggle" title="إظهار/إخفاء">👁</button>
+            </div>
+          </div>
+          
+          <div class="auth-input-group" id="auth-name-group" style="display:none;">
+            <label class="auth-input-label" for="auth-name">الاسم</label>
+            <input type="text" class="auth-input" id="auth-name" placeholder="أدخل اسمك الكامل" required>
+          </div>
+          
+          <div class="auth-input-group" id="auth-phone-group" style="display:none;">
+            <label class="auth-input-label" for="auth-phone">الهاتف</label>
+            <input type="tel" class="auth-input" id="auth-phone" placeholder="0912345678" required>
+          </div>
+          
+          <button type="submit" class="auth-button" id="auth-submit">دخول</button>
+        </form>
+        
+        <div class="auth-divider"><span>أو</span></div>
+        
+        <div class="auth-toggle">
+          <span id="auth-toggle-text">ليس لديك حساب؟ </span>
+          <a id="auth-toggle-link">إنشاء حساب</a>
+        </div>
+      </div>
+      <button class="close-auth" id="close-auth" title="إغلاق">×</button>
+    </div>
+  </div>
   <div class="choice-overlay" aria-hidden="true">
     <section class="choice-modal" aria-label="خيارات التسوق">
       <h2>تمت إضافة المنتج للسلة</h2><p>هل تريد الذهاب إلى السلة أم متابعة التسوق؟</p>
@@ -394,19 +498,257 @@
     const welcomeOverlay = document.getElementById("welcomeOverlay");
     const welcomeCloseButton = document.querySelector(".welcome-close");
     const couponStorageKey = "khotwa_coupon_used";
+    const welcomeShownKey = "khotwa_welcome_shown";
     const oneTimeCouponCode = "SHMT584";
+    
+    function generateUserId() {
+      return "user_" + Date.now() + "_" + Math.random().toString(36).substr(2, 9);
+    }
+    
+    function getUserId() {
+      let userId = localStorage.getItem("khotwa_user_id");
+      if (!userId) {
+        userId = generateUserId();
+        localStorage.setItem("khotwa_user_id", userId);
+      }
+      return userId;
+    }
+    
     if (welcomeCloseButton) {
       welcomeCloseButton.addEventListener("click", () => {
         welcomeOverlay.classList.add("hidden");
+        localStorage.setItem(welcomeShownKey, "true");
         const couponField = document.getElementById("coupon-code");
         if (couponField) couponField.value = oneTimeCouponCode;
       });
     }
-    if (!localStorage.getItem(couponStorageKey)) {
+    
+    const userId = getUserId();
+    const welcomeShown = localStorage.getItem(welcomeShownKey);
+    if (!welcomeShown) {
       setTimeout(() => {
         if (welcomeOverlay) welcomeOverlay.classList.remove("hidden");
       }, 250);
+    } else {
+      welcomeOverlay.classList.add("hidden");
     }
+    
+    const authSystem = {
+      usersKey: "khotwa_users",
+      currentUserKey: "khotwa_current_user",
+      isSignUp: false,
+      
+      getUsers() {
+        return JSON.parse(localStorage.getItem(this.usersKey) || "[]");
+      },
+      
+      saveUsers(users) {
+        localStorage.setItem(this.usersKey, JSON.stringify(users));
+      },
+      
+      getCurrentUser() {
+        const userData = localStorage.getItem(this.currentUserKey);
+        return userData ? JSON.parse(userData) : null;
+      },
+      
+      setCurrentUser(user) {
+        localStorage.setItem(this.currentUserKey, JSON.stringify(user));
+      },
+      
+      logout() {
+        localStorage.removeItem(this.currentUserKey);
+      },
+      
+      register(email, password, name, phone) {
+        const users = this.getUsers();
+        if (users.find(u => u.email === email)) {
+          return { success: false, message: "البريد الإلكتروني مستخدم بالفعل" };
+        }
+        const newUser = {
+          id: Date.now(),
+          email,
+          password: btoa(password),
+          name,
+          phone,
+          createdAt: new Date().toISOString()
+        };
+        users.push(newUser);
+        this.saveUsers(users);
+        this.setCurrentUser({ id: newUser.id, email: newUser.email, name: newUser.name, phone: newUser.phone });
+        return { success: true, message: "تم إنشاء الحساب بنجاح" };
+      },
+      
+      login(email, password) {
+        const users = this.getUsers();
+        const user = users.find(u => u.email === email && u.password === btoa(password));
+        if (!user) {
+          return { success: false, message: "البريد أو كلمة المرور غير صحيحة" };
+        }
+        this.setCurrentUser({ id: user.id, email: user.email, name: user.name, phone: user.phone });
+        return { success: true, message: "تم تسجيل الدخول بنجاح" };
+      }
+    };
+    
+    const authOverlay = document.getElementById("authOverlay");
+    const authForm = document.getElementById("auth-form");
+    const authEmail = document.getElementById("auth-email");
+    const authPassword = document.getElementById("auth-password");
+    const authName = document.getElementById("auth-name");
+    const authPhone = document.getElementById("auth-phone");
+    const authSubmit = document.getElementById("auth-submit");
+    const authTitle = document.getElementById("auth-title");
+    const authSubtitle = document.getElementById("auth-subtitle");
+    const authToggleText = document.getElementById("auth-toggle-text");
+    const authToggleLink = document.getElementById("auth-toggle-link");
+    const closeAuthBtn = document.getElementById("close-auth");
+    const userMenuBtn = document.getElementById("user-menu-btn");
+    const userMenuDropdown = document.getElementById("user-menu-dropdown");
+    const userDisplay = document.getElementById("user-display");
+    const profileBtn = document.getElementById("profile-btn");
+    const ordersBtn = document.getElementById("orders-btn");
+    const logoutBtn = document.getElementById("logout-btn");
+    
+    function updateUserDisplay() {
+      const currentUser = authSystem.getCurrentUser();
+      if (currentUser) {
+        userDisplay.textContent = currentUser.name || currentUser.email;
+        logoutBtn.style.display = "block";
+        profileBtn.style.display = "block";
+        ordersBtn.style.display = "block";
+      } else {
+        userDisplay.textContent = "دخول";
+        logoutBtn.style.display = "none";
+      }
+    }
+    
+    function toggleAuthMode(isSignup) {
+      authSystem.isSignUp = isSignup;
+      const authNameGroup = document.getElementById("auth-name-group");
+      const authPhoneGroup = document.getElementById("auth-phone-group");
+      
+      if (isSignup) {
+        authTitle.textContent = "إنشاء حساب";
+        authSubtitle.textContent = "🔥 انضم إلى عائلة خطوة وتمتع بخصومات حصرية";
+        authNameGroup.style.display = "flex";
+        authPhoneGroup.style.display = "flex";
+        authSubmit.textContent = "إنشاء الحساب";
+        authToggleText.textContent = "لديك حساب بالفعل؟ ";
+        authToggleLink.textContent = "تسجيل دخول";
+      } else {
+        authTitle.textContent = "تسجيل الدخول";
+        authSubtitle.textContent = "استمتع بتجربة تسوق فريدة وآمنة";
+        authNameGroup.style.display = "none";
+        authPhoneGroup.style.display = "none";
+        authName.value = "";
+        authPhone.value = "";
+        authSubmit.textContent = "دخول";
+        authToggleText.textContent = "ليس لديك حساب؟ ";
+        authToggleLink.textContent = "إنشاء حساب";
+      }
+    }
+    
+    authForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const email = authEmail.value.trim();
+      const password = authPassword.value.trim();
+      
+      if (authSystem.isSignUp) {
+        const name = authName.value.trim();
+        const phone = authPhone.value.trim();
+        if (!name || !phone) {
+          notify("أكمل جميع البيانات");
+          return;
+        }
+        const result = authSystem.register(email, password, name, phone);
+        notify(result.message);
+        if (result.success) {
+          updateUserDisplay();
+          authOverlay.classList.remove("open");
+          authForm.reset();
+          toggleAuthMode(false);
+        }
+      } else {
+        const result = authSystem.login(email, password);
+        notify(result.message);
+        if (result.success) {
+          updateUserDisplay();
+          authOverlay.classList.remove("open");
+          authForm.reset();
+        }
+      }
+    });
+    
+    // التحكم بإظهار/إخفاء كلمة المرور
+    const passwordToggle = document.getElementById("password-toggle");
+    passwordToggle.addEventListener("click", (e) => {
+      e.preventDefault();
+      const type = authPassword.getAttribute("type") === "password" ? "text" : "password";
+      authPassword.setAttribute("type", type);
+      passwordToggle.textContent = type === "password" ? "👁" : "👁‍🗨";
+    });
+    
+    userMenuBtn.addEventListener("click", () => {
+      userMenuDropdown.classList.toggle("open");
+    });
+    
+    authToggleLink.addEventListener("click", () => {
+      // إضافة تأثير الستارة
+      const authBody = document.querySelector('.auth-body');
+      authBody.classList.add('slide-mode');
+      
+      setTimeout(() => {
+        toggleAuthMode(!authSystem.isSignUp);
+        authForm.reset();
+        authBody.classList.remove('slide-mode');
+      }, 300);
+    });
+    
+    closeAuthBtn.addEventListener("click", () => {
+      authOverlay.classList.remove("open");
+      authForm.reset();
+      toggleAuthMode(false);
+    });
+    
+    document.addEventListener("click", (e) => {
+      if (!userMenuBtn.contains(e.target) && !userMenuDropdown.contains(e.target)) {
+        userMenuDropdown.classList.remove("open");
+      }
+    });
+    
+    userMenuBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const currentUser = authSystem.getCurrentUser();
+      if (!currentUser) {
+        authOverlay.classList.add("open");
+        toggleAuthMode(false);
+      }
+    });
+    
+    profileBtn.addEventListener("click", () => {
+      const currentUser = authSystem.getCurrentUser();
+      if (currentUser) {
+        notify(`مرحباً ${currentUser.name} — بريدك: ${currentUser.email}`);
+        userMenuDropdown.classList.remove("open");
+      }
+    });
+    
+    ordersBtn.addEventListener("click", () => {
+      const currentUser = authSystem.getCurrentUser();
+      if (currentUser) {
+        notify("سيتم عرض طلباتك قريباً");
+        userMenuDropdown.classList.remove("open");
+      }
+    });
+    
+    logoutBtn.addEventListener("click", () => {
+      authSystem.logout();
+      updateUserDisplay();
+      userMenuDropdown.classList.remove("open");
+      notify("تم تسجيل الخروج بنجاح");
+    });
+    
+    updateUserDisplay();
+    
     const database = {
       keys: { products: "khotwa_products", cart: "khotwa_cart", orders: "khotwa_orders" },
       read(key, fallback) {
